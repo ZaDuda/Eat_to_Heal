@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eat to Heal — Healing Food Catering</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sage: #6b8f71;
+    --sage-light: #a8c5a0;
+    --sage-dark: #3d5c42;
+    --cream: #f5f0e8;
+    --cream-dark: #e8e0d0;
+    --earth: #8c6a4a;
+    --earth-light: #c9a87c;
+    --charcoal: #2a2a2a;
+    --white: #fdfcf9;
+    --drop-green: #4a7c59;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(253, 252, 249, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(107, 143, 113, 0.15);
+    transition: all 0.3s ease;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--charcoal);
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .nav-links a:hover { opacity: 1; color: var(--sage-dark); }
+
+  .nav-cta {
+    background: var(--drop-green);
+    color: var(--white) !important;
+    opacity: 1 !important;
+    padding: 0.6rem 1.4rem;
+    border-radius: 50px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 80% at 70% 50%, rgba(168, 197, 160, 0.18) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 40% at 20% 80%, rgba(201, 168, 124, 0.12) 0%, transparent 60%);
+  }
+
+  .hero-content { position: relative; z-index: 1; }
+
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--sage);
+    display: inline-block;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 6vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--drop-green);
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #666;
+    max-width: 420px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s 0.2s ease both;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--drop-green);
+    color: var(--white);
+    padding: 0.9rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(74, 124, 89, 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(74, 124, 89, 0.4);
+  }
+
+  .btn-ghost {
+    color: var(--charcoal);
+    text-decoration: none;
+    font-size: 0.9rem;
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: opacity 0.2s;
+  }
+  .btn-ghost:hover { opacity: 1; }
+
+  /* ── HERO LOGO VISUAL ── */
+  .hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 1.2s 0.2s ease both;
+  }
+
+  .logo-large {
+    width: 340px;
+    height: 400px;
+    position: relative;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-16px); }
+  }
+
+  /* Decorative rings */
+  .hero-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(107, 143, 113, 0.2);
+    animation: pulse-ring 4s ease-in-out infinite;
+  }
+
+  .ring-1 { width: 320px; height: 320px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 0s; }
+  .ring-2 { width: 420px; height: 420px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 1s; }
+  .ring-3 { width: 520px; height: 520px; top: 50%; left: 50%; transform: translate(-50%,-50%); animation-delay: 2s; }
+
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 0.4; transform: translate(-50%,-50%) scale(1); }
+    50% { opacity: 0.1; transform: translate(-50%,-50%) scale(1.03); }
+  }
+
+  /* ── LOGO SVG ── */
+  .logo-svg { width: 100%; height: 100%; }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 6rem 4rem; }
+
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .section-label::before { content: ''; width: 24px; height: 1px; background: var(--sage); display: inline-block; }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  /* ── ABOUT ── */
+  .about {
+    background: var(--cream);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .stat-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 16px;
+    border: 1px solid rgba(107, 143, 113, 0.15);
+  }
+
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 300;
+    color: var(--drop-green);
+    line-height: 1;
+  }
+
+  .stat-label { font-size: 0.8rem; color: #888; margin-top: 0.3rem; }
+
+  .about-image-area {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .about-card {
+    background: var(--drop-green);
+    color: var(--white);
+    padding: 3rem;
+    border-radius: 24px;
+    max-width: 340px;
+    position: relative;
+  }
+
+  .about-card-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.4;
+    margin-bottom: 1.5rem;
+    opacity: 0.9;
+  }
+
+  .about-card-sig {
+    font-size: 0.78rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .about-card-leaf {
+    position: absolute;
+    top: -24px; right: -24px;
+    width: 80px; height: 80px;
+    background: var(--earth-light);
+    border-radius: 50% 0 50% 50%;
+    opacity: 0.6;
+  }
+
+  /* ── MENU ── */
+  .menu { background: var(--white); }
+  .menu-intro { max-width: 600px; margin-bottom: 3rem; }
+  .menu-intro p { font-size: 1rem; line-height: 1.7; color: #666; margin-top: 0.75rem; }
+
+  .menu-categories {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .cat-btn {
+    padding: 0.5rem 1.4rem;
+    border-radius: 50px;
+    border: 1px solid rgba(107, 143, 113, 0.3);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+
+  .cat-btn.active, .cat-btn:hover {
+    background: var(--drop-green);
+    border-color: var(--drop-green);
+    color: var(--white);
+  }
+
+  .menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .menu-item {
+    background: var(--white);
+    border: 1px solid rgba(107, 143, 113, 0.15);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .menu-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(74, 124, 89, 0.12);
+  }
+
+  .menu-item.hidden { display: none; }
+
+  .menu-item-emoji {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    background: var(--cream);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .menu-item-emoji::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 70%, rgba(107,143,113,0.1), transparent 60%);
+  }
+
+  .menu-item-body { padding: 1.25rem; }
+
+  .menu-item-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 0.4rem;
+  }
+
+  .menu-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+  }
+
+  .menu-item-desc { font-size: 0.82rem; color: #888; line-height: 1.55; margin-bottom: 1rem; }
+
+  .menu-item-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .menu-item-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--drop-green);
+  }
+
+  .add-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--drop-green);
+    color: var(--white);
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, background 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .add-btn:hover { transform: scale(1.15); background: var(--sage-dark); }
+  .add-btn.added { background: var(--earth); }
+
+  .item-qty-badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: var(--earth);
+    color: var(--white);
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.2rem 0.55rem;
+    display: none;
+  }
+
+  .item-qty-badge.show { display: block; }
+
+  /* ── ORDER SIDEBAR ── */
+  .order-sidebar {
+    position: fixed;
+    right: 0; top: 0; bottom: 0;
+    width: 360px;
+    background: var(--white);
+    box-shadow: -8px 0 40px rgba(0,0,0,0.08);
+    z-index: 200;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid rgba(107,143,113,0.15);
+  }
+
+  .order-sidebar.open { transform: translateX(0); }
+
+  .sidebar-header {
+    padding: 2rem 1.75rem 1.25rem;
+    border-bottom: 1px solid rgba(107,143,113,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .sidebar-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+
+  .close-sidebar {
+    background: none; border: none; cursor: pointer;
+    font-size: 1.5rem; color: #999;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .close-sidebar:hover { color: var(--charcoal); }
+
+  .sidebar-items { flex: 1; overflow-y: auto; padding: 1.25rem 1.75rem; }
+
+  .order-empty {
+    text-align: center;
+    color: #bbb;
+    padding: 3rem 0;
+    font-size: 0.9rem;
+  }
+  .order-empty span { font-size: 3rem; display: block; margin-bottom: 0.75rem; }
+
+  .order-line {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(107,143,113,0.08);
+  }
+
+  .order-line-emoji { font-size: 1.6rem; width: 40px; text-align: center; }
+
+  .order-line-info { flex: 1; }
+  .order-line-name { font-size: 0.88rem; font-weight: 500; }
+  .order-line-price { font-size: 0.78rem; color: var(--sage-dark); }
+
+  .order-line-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .qty-btn {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 1px solid rgba(107,143,113,0.3);
+    background: none;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--charcoal);
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .qty-btn:hover { background: var(--drop-green); border-color: var(--drop-green); color: var(--white); }
+
+  .qty-num { font-size: 0.88rem; min-width: 1.2rem; text-align: center; }
+
+  .sidebar-footer {
+    padding: 1.5rem 1.75rem;
+    border-top: 1px solid rgba(107,143,113,0.12);
+  }
+
+  .order-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+  }
+
+  .order-total-label { font-size: 0.85rem; color: #888; }
+
+  .order-total-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--drop-green);
+  }
+
+  .checkout-btn {
+    width: 100%;
+    background: var(--drop-green);
+    color: var(--white);
+    border: none;
+    padding: 1rem;
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    transition: background 0.2s, transform 0.15s;
+  }
+
+  .checkout-btn:hover { background: var(--sage-dark); transform: translateY(-1px); }
+  .checkout-btn:disabled { background: #ccc; cursor: not-allowed; transform: none; }
+
+  /* ── CART BUBBLE ── */
+  .cart-bubble {
+    position: fixed;
+    bottom: 2rem; right: 2rem;
+    z-index: 150;
+    background: var(--drop-green);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    padding: 0.85rem 1.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 0 8px 30px rgba(74,124,89,0.35);
+    transition: transform 0.2s, opacity 0.3s;
+    opacity: 0;
+    pointer-events: none;
+    letter-spacing: 0.05em;
+  }
+
+  .cart-bubble.visible { opacity: 1; pointer-events: all; }
+  .cart-bubble:hover { transform: scale(1.05); }
+
+  .cart-count {
+    background: var(--white);
+    color: var(--drop-green);
+    border-radius: 50%;
+    width: 22px; height: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+
+  /* ── OVERLAY ── */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(42,42,42,0.3);
+    z-index: 190;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .overlay.show { opacity: 1; pointer-events: all; }
+
+  /* ── SUCCESS MODAL ── */
+  .modal-wrap {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(42,42,42,0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .modal-wrap.show { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--white);
+    border-radius: 24px;
+    padding: 3rem;
+    max-width: 420px;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+  }
+
+  .modal-wrap.show .modal { transform: scale(1); }
+
+  .modal-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+
+  .modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 0.5rem;
+    color: var(--drop-green);
+  }
+
+  .modal-text { font-size: 0.9rem; color: #888; line-height: 1.6; margin-bottom: 1.5rem; }
+
+  .modal-btn {
+    background: var(--drop-green);
+    color: var(--white);
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+  }
+
+  /* ── CATERING INFO ── */
+  .catering { background: var(--cream); }
+
+  .catering-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .catering-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(107,143,113,0.12);
+    transition: transform 0.2s;
+  }
+
+  .catering-card:hover { transform: translateY(-3px); }
+
+  .catering-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .catering-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 400;
+    margin-bottom: 0.5rem;
+  }
+
+  .catering-card p { font-size: 0.85rem; color: #888; line-height: 1.6; }
+
+  /* ── CONTACT ── */
+  .contact {
+    background: var(--sage-dark);
+    color: var(--white);
+    text-align: center;
+  }
+
+  .contact .section-label { color: var(--sage-light); justify-content: center; }
+  .contact .section-label::before { background: var(--sage-light); }
+  .contact .section-title { color: var(--white); }
+
+  .contact-subtitle { color: rgba(255,255,255,0.6); max-width: 480px; margin: 0.75rem auto 2.5rem; font-size: 0.95rem; line-height: 1.7; }
+
+  .contact-methods {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .contact-pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--white);
+    padding: 0.75rem 1.75rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 0.88rem;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.2s;
+  }
+
+  .contact-pill:hover { background: rgba(255,255,255,0.22); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--charcoal);
+    color: rgba(255,255,255,0.4);
+    text-align: center;
+    padding: 2rem 4rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+  }
+
+  footer span { color: rgba(168,197,160,0.7); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; padding: 6rem 1.5rem 3rem; text-align: center; }
+    .hero-visual { margin-top: 3rem; }
+    .hero-eyebrow { justify-content: center; }
+    .hero-subtitle { margin: 0 auto 2rem; }
+    .hero-actions { justify-content: center; }
+    .about { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 1.5rem; }
+    section { padding: 4rem 1.5rem; }
+    .catering-grid { grid-template-columns: 1fr; }
+    .logo-large { width: 240px; height: 280px; }
+    .order-sidebar { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <svg width="32" height="38" viewBox="0 0 32 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 2C16 2 4 14 4 22C4 29.2 9.4 35 16 35C22.6 35 28 29.2 28 22C28 14 16 2 16 2Z" fill="#4a7c59" opacity="0.15"/>
+      <path d="M16 4C16 4 5 15.5 5 23C5 30.2 9.9 36 16 36C22.1 36 27 30.2 27 23C27 15.5 16 4 16 4Z" fill="none" stroke="#4a7c59" stroke-width="1.5"/>
+      <path d="M11 21 Q16 14 21 21" stroke="#4a7c59" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <circle cx="16" cy="21" r="1.5" fill="#4a7c59" opacity="0.7"/>
+      <path d="M16 21 C13 24 11 27 13 30" stroke="#a8c5a0" stroke-width="1" fill="none" stroke-linecap="round"/>
+    </svg>
+    <span style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:400; letter-spacing:0.05em; color:var(--charcoal)">Eat to Heal</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#catering">Catering</a></li>
+    <li><a href="#contact" class="nav-cta">Order Now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Healing Food Catering</div>
+    <h1 class="hero-title">Food that <em>nourishes</em> body & soul</h1>
+    <p class="hero-subtitle">Wholesome, plant-forward catering for events, gatherings, and daily nourishment. Every dish crafted to heal from within.</p>
+    <div class="hero-actions">
+      <a href="#menu" class="btn-primary">Explore Our Menu</a>
+      <a href="#catering" class="btn-ghost">Learn about catering →</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="hero-ring ring-1"></div>
+    <div class="hero-ring ring-2"></div>
+    <div class="hero-ring ring-3"></div>
+    <div class="logo-large">
+      <!-- THE LIVING DROP LOGO — Concept 1: Organic water drop with leaf energy -->
+      <svg class="logo-svg" viewBox="0 0 280 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Drop outer glow -->
+        <ellipse cx="140" cy="210" rx="90" ry="45" fill="rgba(107,143,113,0.08)"/>
+
+        <!-- Main drop shape -->
+        <path d="M140 20 C140 20 55 110 55 185 C55 237 92 278 140 278 C188 278 225 237 225 185 C225 110 140 20 140 20Z"
+              fill="url(#dropGrad)" stroke="url(#dropStroke)" stroke-width="1.5"/>
+
+        <!-- Inner leaf/plant design inside the drop -->
+        <!-- Stem -->
+        <line x1="140" y1="260" x2="140" y2="130" stroke="#a8c5a0" stroke-width="2" stroke-linecap="round"/>
+
+        <!-- Left leaf -->
+        <path d="M140 190 C120 170 95 175 90 195 C105 185 125 195 140 190Z" fill="#6b8f71" opacity="0.85"/>
+        <!-- Right leaf -->
+        <path d="M140 165 C160 145 185 150 187 170 C172 160 152 170 140 165Z" fill="#4a7c59" opacity="0.9"/>
+        <!-- Small top leaf -->
+        <path d="M140 140 C130 122 115 128 116 142 C124 135 133 142 140 140Z" fill="#a8c5a0" opacity="0.8"/>
+
+        <!-- Center highlight droplet -->
+        <ellipse cx="116" cy="155" rx="6" ry="10" fill="rgba(255,255,255,0.25)" transform="rotate(-25 116 155)"/>
+
+        <!-- Shine -->
+        <path d="M100 100 Q108 85 120 90" stroke="rgba(255,255,255,0.5)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+        <!-- Text: THE LIVING DROP -->
+        <text x="140" y="312" text-anchor="middle"
+              font-family="'Cormorant Garamond', Georgia, serif"
+              font-size="18" font-weight="300" letter-spacing="6"
+              fill="#3d5c42">EAT TO HEAL</text>
+        <text x="140" y="330" text-anchor="middle"
+              font-family="'DM Sans', sans-serif"
+              font-size="7.5" font-weight="400" letter-spacing="4"
+              fill="#6b8f71" opacity="0.8">HEALING FOOD CATERING</text>
+
+        <!-- Gradients -->
+        <defs>
+          <linearGradient id="dropGrad" x1="140" y1="20" x2="140" y2="280" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#7db88a"/>
+            <stop offset="55%" stop-color="#4a7c59"/>
+            <stop offset="100%" stop-color="#2d5c40"/>
+          </linearGradient>
+          <linearGradient id="dropStroke" x1="140" y1="20" x2="200" y2="280" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#a8c5a0"/>
+            <stop offset="100%" stop-color="#3d5c42"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div>
+    <div class="section-label">Our Philosophy</div>
+    <h2 class="section-title">Rooted in nature,<br>served with intention</h2>
+    <p style="color:#666; line-height:1.75; margin-bottom:1rem; font-size:0.95rem;">
+      The Eat to Heal concept was born from the belief that food is the most powerful medicine. We source seasonal, local ingredients and prepare every dish with care — no shortcuts, no compromises.
+    </p>
+    <p style="color:#666; line-height:1.75; font-size:0.95rem;">
+      Whether you're hosting an intimate dinner or a large corporate event, we bring the same devotion to every plate we craft.
+    </p>
+    <div class="about-stats">
+      <div class="stat-card">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Plant-forward ingredients</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Seasonal menu items</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">0</div>
+        <div class="stat-label">Artificial additives</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">Love per portion</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-image-area">
+    <div class="about-card">
+      <div class="about-card-leaf"></div>
+      <div class="about-card-quote">"Let food be thy medicine and medicine be thy food."</div>
+      <div class="about-card-sig">— Hippocrates, & our daily mantra</div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu" id="menu">
+  <div class="menu-intro">
+    <div class="section-label">What We Offer</div>
+    <h2 class="section-title">Our healing menu</h2>
+    <p>Choose your dishes and we'll prepare them fresh for your event. Minimum order for catering is 10 portions per item.</p>
+  </div>
+
+  <div class="menu-categories">
+    <button class="cat-btn active" data-cat="all">All Items</button>
+    <button class="cat-btn" data-cat="starters">Starters</button>
+    <button class="cat-btn" data-cat="mains">Mains</button>
+    <button class="cat-btn" data-cat="bowls">Power Bowls</button>
+    <button class="cat-btn" data-cat="soups">Soups</button>
+    <button class="cat-btn" data-cat="desserts">Desserts</button>
+    <button class="cat-btn" data-cat="drinks">Elixirs</button>
+  </div>
+
+  <div class="menu-grid" id="menuGrid">
+    <!-- Starters -->
+    <div class="menu-item" data-cat="starters" data-name="Turmeric Hummus Plate" data-price="8.50" data-emoji="🫙">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🫙</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Starters</div>
+        <div class="menu-item-name">Turmeric Hummus Plate</div>
+        <div class="menu-item-desc">House-made golden hummus with roasted chickpeas, za'atar oil, and seasonal crudités.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€8.50</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item" data-cat="starters" data-name="Avocado & Seed Toast" data-price="7.00" data-emoji="🥑">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🥑</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Starters</div>
+        <div class="menu-item-name">Avocado & Seed Toast</div>
+        <div class="menu-item-desc">Sourdough topped with smashed avocado, hemp seeds, micro-herbs, and lemon zest.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€7.00</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item" data-cat="starters" data-name="Roasted Beet Bruschetta" data-price="6.50" data-emoji="🫐">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🫐</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Starters</div>
+        <div class="menu-item-name">Roasted Beet Bruschetta</div>
+        <div class="menu-item-desc">Oven-roasted beets on walnut cream, with fresh dill and pomegranate pearls.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€6.50</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mains -->
+    <div class="menu-item" data-cat="mains" data-name="Forest Mushroom Risotto" data-price="14.00" data-emoji="🍄">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🍄</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Mains</div>
+        <div class="menu-item-name">Forest Mushroom Risotto</div>
+        <div class="menu-item-desc">Creamy arborio with wild mushrooms, sage-infused broth, and truffle oil finish.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€14.00</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item" data-cat="mains" data-name="Lentil Shepherd's Pie" data-price="13.00" data-emoji="🥧">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🥧</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Mains</div>
+        <div class="menu-item-name">Lentil Shepherd's Pie</div>
+        <div class="menu-item-desc">Hearty red lentil and root vegetable filling beneath a golden mashed potato crust.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€13.00</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item" data-cat="mains" data-name="Grilled Vegetable Platter" data-price="12.50" data-emoji="🌽">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🌽</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Mains</div>
+        <div class="menu-item-name">Grilled Vegetable Platter</div>
+        <div class="menu-item-desc">Seasonal char-grilled vegetables with chimichurri verde and toasted pine nuts.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€12.50</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bowls -->
+    <div class="menu-item" data-cat="bowls" data-name="Living Green Bowl" data-price="11.00" data-emoji="🥗">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🥗</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Power Bowls</div>
+        <div class="menu-item-name">Living Green Bowl</div>
+        <div class="menu-item-desc">Kale, spinach, quinoa, edamame, avocado, cucumber, with tahini-lemon dressing.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€11.00</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item" data-cat="bowls" data-name="Golden Immunity Bowl" data-price="12.00" data-emoji="🌾">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🌾</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Power Bowls</div>
+        <div class="menu-item-name">Golden Immunity Bowl</div>
+        <div class="menu-item-desc">Brown rice, roasted sweet potato, black beans, turmeric cashew cream, pickled red onion.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€12.00</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Soups -->
+    <div class="menu-item" data-cat="soups" data-name="Healing Miso Broth" data-price="7.50" data-emoji="🍵">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🍵</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Soups</div>
+        <div class="menu-item-name">Healing Miso Broth</div>
+        <div class="menu-item-desc">White miso, wakame, silken tofu, spring onion, and sesame. Gut-loving and light.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€7.50</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item" data-cat="soups" data-name="Spiced Pumpkin Bisque" data-price="8.00" data-emoji="🎃">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🎃</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Soups</div>
+        <div class="menu-item-name">Spiced Pumpkin Bisque</div>
+        <div class="menu-item-desc">Roasted butternut with ginger, coriander, coconut cream, and toasted pumpkin seeds.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€8.00</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desserts -->
+    <div class="menu-item" data-cat="desserts" data-name="Raw Cacao Bliss Balls" data-price="5.50" data-emoji="🍫">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🍫</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Desserts</div>
+        <div class="menu-item-name">Raw Cacao Bliss Balls</div>
+        <div class="menu-item-desc">Dates, almonds, raw cacao, rolled in coconut. No refined sugar, pure joy. (per 4)</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€5.50</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item" data-cat="desserts" data-name="Chia & Berry Parfait" data-price="7.00" data-emoji="🍓">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">🍓</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Desserts</div>
+        <div class="menu-item-name">Chia & Berry Parfait</div>
+        <div class="menu-item-desc">Vanilla chia pudding, mixed berry compote, granola, and fresh mint layers.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€7.00</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drinks / Elixirs -->
+    <div class="menu-item" data-cat="drinks" data-name="Turmeric Sun Elixir" data-price="5.00" data-emoji="☀️">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">☀️</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Elixirs</div>
+        <div class="menu-item-name">Turmeric Sun Elixir</div>
+        <div class="menu-item-desc">Fresh turmeric, ginger, lemon, black pepper, and raw honey. Anti-inflammatory shot or long drink.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€5.00</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="menu-item" data-cat="drinks" data-name="Adaptogen Cacao Latte" data-price="6.00" data-emoji="☕">
+      <div class="item-qty-badge"></div>
+      <div class="menu-item-emoji">☕</div>
+      <div class="menu-item-body">
+        <div class="menu-item-tag">Elixirs</div>
+        <div class="menu-item-name">Adaptogen Cacao Latte</div>
+        <div class="menu-item-desc">Oat milk, reishi mushroom, raw cacao, ashwagandha, and a touch of maple.</div>
+        <div class="menu-item-footer">
+          <span class="menu-item-price">€6.00</span>
+          <button class="add-btn" onclick="addToCart(this)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATERING INFO -->
+<section class="catering" id="catering">
+  <div class="section-label">How It Works</div>
+  <h2 class="section-title">Catering for every occasion</h2>
+  <div class="catering-grid">
+    <div class="catering-card">
+      <div class="catering-icon">🌿</div>
+      <h3>Corporate Events</h3>
+      <p>Nourish your team with mindful, energising food. We handle setup, serving, and cleanup so you can focus on what matters.</p>
+    </div>
+    <div class="catering-card">
+      <div class="catering-icon">🎉</div>
+      <h3>Private Gatherings</h3>
+      <p>From intimate dinners to birthday celebrations, we customise the menu to your guests' dietary needs and preferences.</p>
+    </div>
+    <div class="catering-card">
+      <div class="catering-icon">🌱</div>
+      <h3>Wellness Retreats</h3>
+      <p>Designed for yoga studios, wellness weekends, and health retreats — food that deepens the experience.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-label">Get in Touch</div>
+  <h2 class="section-title">Ready to bring<br><em>Eat to Heal</em> to your table?</h2>
+  <p class="contact-subtitle">Send us your order or enquiry. We respond within 24 hours and confirm all catering bookings personally.</p>
+  <div class="contact-methods">
+    <a href="mailto:hello@eattoheal.com" class="contact-pill">✉ hello@eattoheal.com</a>
+    <a href="tel:+35900000000" class="contact-pill">📞 +359 00 000 000</a>
+    <a href="#menu" class="contact-pill" style="background:rgba(255,255,255,0.2)">🛒 Place an order above</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 <span>Eat to Heal</span> — Healing Food Catering. Made with 🌿 in Bulgaria.</p>
+</footer>
+
+<!-- ORDER SIDEBAR -->
+<div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+<div class="order-sidebar" id="orderSidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Your Order</div>
+    <button class="close-sidebar" onclick="closeSidebar()">×</button>
+  </div>
+  <div class="sidebar-items" id="sidebarItems">
+    <div class="order-empty"><span>🌿</span>Your order is empty.<br>Add items from the menu.</div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="order-total">
+      <span class="order-total-label">Total (per portion)</span>
+      <span class="order-total-amount" id="orderTotal">€0.00</span>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>Request Catering Quote →</button>
+  </div>
+</div>
+
+<!-- CART BUBBLE -->
+<button class="cart-bubble" id="cartBubble" onclick="openSidebar()">
+  🛒 View Order
+  <span class="cart-count" id="cartCount">0</span>
+</button>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-wrap" id="successModal">
+  <div class="modal">
+    <div class="modal-icon">🌿</div>
+    <div class="modal-title">Order Received!</div>
+    <p class="modal-text">Thank you! We've received your catering request and will be in touch within 24 hours to confirm details and pricing for your event.</p>
+    <button class="modal-btn" onclick="closeModal()">Back to Menu</button>
+  </div>
+</div>
+
+<script>
+  // ── CART STATE ──
+  const cart = {};
+
+  function getItem(btn) {
+    const card = btn.closest('.menu-item');
+    return {
+      name: card.dataset.name,
+      price: parseFloat(card.dataset.price),
+      emoji: card.dataset.emoji,
+      key: card.dataset.name,
+    };
+  }
+
+  function addToCart(btn) {
+    const item = getItem(btn);
+    if (!cart[item.key]) cart[item.key] = { ...item, qty: 0 };
+    cart[item.key].qty++;
+    btn.textContent = '✓';
+    btn.classList.add('added');
+    setTimeout(() => { btn.textContent = '+'; btn.classList.remove('added'); }, 600);
+    updateBadge(btn.closest('.menu-item'));
+    renderSidebar();
+    showBubble();
+  }
+
+  function updateBadge(card) {
+    const key = card.dataset.name;
+    const badge = card.querySelector('.item-qty-badge');
+    const qty = cart[key] ? cart[key].qty : 0;
+    badge.textContent = `×${qty}`;
+    badge.classList.toggle('show', qty > 0);
+  }
+
+  function updateAllBadges() {
+    document.querySelectorAll('.menu-item').forEach(card => updateBadge(card));
+  }
+
+  function renderSidebar() {
+    const container = document.getElementById('sidebarItems');
+    const keys = Object.keys(cart).filter(k => cart[k].qty > 0);
+
+    if (keys.length === 0) {
+      container.innerHTML = '<div class="order-empty"><span>🌿</span>Your order is empty.<br>Add items from the menu.</div>';
+      document.getElementById('orderTotal').textContent = '€0.00';
+      document.getElementById('checkoutBtn').disabled = true;
+      document.getElementById('cartCount').textContent = '0';
+      return;
+    }
+
+    let total = 0;
+    let totalQty = 0;
+    let html = '';
+
+    keys.forEach(key => {
+      const it = cart[key];
+      total += it.price * it.qty;
+      totalQty += it.qty;
+      html += `
+        <div class="order-line">
+          <div class="order-line-emoji">${it.emoji}</div>
+          <div class="order-line-info">
+            <div class="order-line-name">${it.name}</div>
+            <div class="order-line-price">€${it.price.toFixed(2)} each</div>
+          </div>
+          <div class="order-line-controls">
+            <button class="qty-btn" onclick="changeQty('${key}', -1)">−</button>
+            <span class="qty-num">${it.qty}</span>
+            <button class="qty-btn" onclick="changeQty('${key}', 1)">+</button>
+          </div>
+        </div>`;
+    });
+
+    container.innerHTML = html;
+    document.getElementById('orderTotal').textContent = `€${total.toFixed(2)}`;
+    document.getElementById('checkoutBtn').disabled = false;
+    document.getElementById('cartCount').textContent = totalQty;
+    updateAllBadges();
+  }
+
+  function changeQty(key, delta) {
+    if (!cart[key]) return;
+    cart[key].qty = Math.max(0, cart[key].qty + delta);
+    if (cart[key].qty === 0) delete cart[key];
+    renderSidebar();
+    updateAllBadges();
+    if (Object.keys(cart).filter(k => cart[k].qty > 0).length === 0) hideBubble();
+  }
+
+  function showBubble() { document.getElementById('cartBubble').classList.add('visible'); }
+  function hideBubble() { document.getElementById('cartBubble').classList.remove('visible'); }
+
+  function openSidebar() {
+    document.getElementById('orderSidebar').classList.add('open');
+    document.getElementById('overlay').classList.add('show');
+  }
+
+  function closeSidebar() {
+    document.getElementById('orderSidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('show');
+  }
+
+  function checkout() {
+    closeSidebar();
+    document.getElementById('successModal').classList.add('show');
+    // Clear cart
+    Object.keys(cart).forEach(k => delete cart[k]);
+    renderSidebar();
+    hideBubble();
+  }
+
+  function closeModal() {
+    document.getElementById('successModal').classList.remove('show');
+  }
+
+  // ── CATEGORY FILTER ──
+  document.querySelectorAll('.cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+      document.querySelectorAll('.menu-item').forEach(item => {
+        item.classList.toggle('hidden', cat !== 'all' && item.dataset.cat !== cat);
+      });
+    });
+  });
+</script>
+</body>
+</html>
